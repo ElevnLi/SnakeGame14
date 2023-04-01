@@ -9,8 +9,48 @@ COLOUR_BG = (175, 215, 70)
 COLOUR_FRUIT = (183, 111, 122)
 COLOUR_SNAKE = (126, 166, 114)
 
-MAX_FPS = 60
+MAX_FPS = 100
 CELL_SIZE, CELL_NUMBER = 40, 20
+
+
+class Fruit:
+    def __init__(self):
+        self.random_place()
+
+    def random_place(self):
+        self.x = randint(0, CELL_NUMBER - 1)
+        self.y = randint(0, CELL_NUMBER - 1)
+        self.pos = Vector2(self.x, self.y)
+
+    def draw(self):
+        fruit_rect = pygame.Rect(
+            self.pos.x * CELL_SIZE, self.pos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE
+        )
+        canva.blit(fruit_graphic, fruit_rect)
+
+
+class Snake:
+    def __init__(self):
+        self.body = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
+        self.direction = Vector2(1, 0)
+
+    def draw(self):
+        for block in self.body:
+            block_rect = pygame.Rect(
+                block.x * CELL_SIZE, block.y * CELL_SIZE, CELL_SIZE, CELL_SIZE
+            )
+            pygame.draw.rect(canva, COLOUR_SNAKE, block_rect)
+
+    @property
+    def head(self):
+        return self.body[-1]
+
+    def move(self):
+        current_head = self.head
+        new_head = current_head + self.direction
+        new_body = self.body[1:]
+        new_body.append(new_head)
+        self.body = new_head[:]
 
 
 package_base_path = os.path.dirname(os.path.abspath(__file__))
@@ -76,14 +116,21 @@ crunch_sound_graphic = pygame.mixer.Sound(
     os.path.join(package_base_path, "Assets", "Sound", "crunch.wav")
 )
 
+fruit = Fruit()
+snake = Snake()
+
 while True:
     # 输入
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == SNAKE_UPDATE:
+            snake.move()
 
     # 渲染
     canva.fill(COLOUR_BG)
+    fruit.draw()
+    snake.draw()
     pygame.display.update()
     clock.tick(MAX_FPS)
