@@ -128,6 +128,19 @@ while True:
             sys.exit()
         if event.type == SNAKE_UPDATE:
             snake.move()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                if snake.direction != Vector2(0, 1):
+                    snake.direction = Vector2(0, -1)
+            elif event.key == pygame.K_DOWN:
+                if snake.direction != Vector2(0, -1):
+                    snake.direction = Vector2(0, 1)
+            elif event.key == pygame.K_LEFT:
+                if snake.direction != Vector2(1, 0):
+                    snake.direction = Vector2(-1, 0)
+            elif event.key == pygame.K_RIGHT:
+                if snake.direction != Vector2(-1, 0):
+                    snake.direction = Vector2(1, 0)
 
     # 渲染
     canva.fill(COLOUR_BG)
