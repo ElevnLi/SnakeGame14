@@ -35,17 +35,56 @@ class Snake:
         self.body: List[Vector2] = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
         self.direction = Vector2(1, 0)
         self.add_body = False
+        self.head_graphic = head_right_graphic
+        self.tail_graphic = tail_left_graphic
 
     def draw(self):
-        for block in self.body:
+        self.update_head_graphic()
+        self.update_tail_graphic()
+        for index, block in enumerate(self.body):
             block_rect = pygame.Rect(
                 block.x * CELL_SIZE, block.y * CELL_SIZE, CELL_SIZE, CELL_SIZE
             )
-            pygame.draw.rect(canva, COLOUR_SNAKE, block_rect)
+            if index == self.length - 1:
+                canva.blit(self.head_graphic, block_rect)
+            elif index == 0:
+                canva.blit(self.tail_graphic, block_rect)
+            else:
+                pygame.draw.rect(canva, COLOUR_SNAKE, block_rect)
 
     @property
     def head(self):
         return self.body[-1]
+
+    @property
+    def tail(self):
+        return self.body[0]
+
+    @property
+    def length(self):
+        return len(self.body)
+
+    def update_head_graphic(self):
+        head_direction = self.head - self.body[-2]
+        if head_direction == Vector2(1, 0):
+            self.head_graphic = head_right_graphic
+        elif head_direction == Vector2(-1, 0):
+            self.head_graphic = head_left_graphic
+        elif head_direction == Vector2(0, 1):
+            self.head_graphic = head_down_graphic
+        elif head_direction == Vector2(0, -1):
+            self.head_graphic = head_up_graphic
+
+    def update_tail_graphic(self):
+        tail_direction = self.tail - self.body[1]
+        if tail_direction == Vector2(1, 0):
+            self.tail_graphic = tail_right_graphic
+        elif tail_direction == Vector2(-1, 0):
+            self.tail_graphic = tail_left_graphic
+        elif tail_direction == Vector2(0, 1):
+            self.tail_graphic = tail_down_graphic
+        elif tail_direction == Vector2(0, -1):
+            self.tail_graphic = tail_up_graphic
 
     def move(self):
         current_head = self.head
