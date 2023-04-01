@@ -32,8 +32,11 @@ class Fruit:
 
 class Snake:
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.body: List[Vector2] = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
-        self.direction = Vector2(1, 0)
+        self.direction = Vector2(0, 0)
         self.add_body = False
         self.head_graphic = head_right_graphic
         self.tail_graphic = tail_left_graphic
@@ -175,8 +178,7 @@ class SnakeGame:
                 self.game_over()
 
     def game_over(self):
-        pygame.quit()
-        sys.exit()
+        self.snake.reset()
 
 
 package_base_path = os.path.dirname(os.path.abspath(__file__))
@@ -248,7 +250,8 @@ while True:
     # 输入
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            snake_game.game_over()
+            pygame.quit()
+            sys.exit()
         if event.type == SNAKE_UPDATE:
             snake_game.update()
         if event.type == pygame.KEYDOWN:
