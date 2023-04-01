@@ -1,6 +1,7 @@
 import os
 import sys
 from random import randint
+from typing import List
 
 import pygame
 from pygame.math import Vector2
@@ -31,7 +32,7 @@ class Fruit:
 
 class Snake:
     def __init__(self):
-        self.body = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
+        self.body: List[Vector2] = [Vector2(5, 10), Vector2(6, 10), Vector2(7, 10)]
         self.direction = Vector2(1, 0)
 
     def draw(self):
@@ -50,7 +51,7 @@ class Snake:
         new_head = current_head + self.direction
         new_body = self.body[1:]
         new_body.append(new_head)
-        self.body = new_head[:]
+        self.body = new_body[:]
 
 
 package_base_path = os.path.dirname(os.path.abspath(__file__))
